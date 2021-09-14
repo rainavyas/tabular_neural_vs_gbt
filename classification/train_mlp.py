@@ -190,8 +190,8 @@ def main():
     df_train = pd.read_csv(args.train_path)
     df_dev_in = pd.read_csv(args.dev_in_path)
 
-    X_train = torch.from_numpy(np.asarray(df_train.iloc[:,6:]))
-    X_dev_in = torch.from_numpy(np.asarray(df_dev_in.iloc[:,6:]))
+    X_train = torch.FloatTensor(np.asarray(df_train.iloc[:,6:]))
+    X_dev_in = torch.FloatTensor(np.asarray(df_dev_in.iloc[:,6:]))
 
     lab_to_ind = get_lab_to_ind(df_train)
     batch_size = 1024
