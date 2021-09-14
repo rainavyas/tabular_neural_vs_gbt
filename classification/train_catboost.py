@@ -49,3 +49,6 @@ def main():
         eval_set = (X_dev_in, y_dev_in))
     
     model.save_model(f'{args.save_dir_path}/seed{args.seed}.cbm')
+
+if __name__ == '__main__':
+    main()
