@@ -187,13 +187,10 @@ def main():
     with open('CMDs/train_mlp.cmd', 'a') as f:
         f.write(' '.join(sys.argv)+'\n')
     
-    # df_train = pd.read_csv(args.train_path)
+    df_train = pd.read_csv(args.train_path)
     df_dev_in = pd.read_csv(args.dev_in_path)
 
-    # X_train = torch.from_numpy(np.asarray(df_train.iloc[:,6:]))
-    print(df_dev_in.head())
-    temp = np.asarray(df_dev_in.iloc[:,6:])
-    print(type(temp))
+    X_train = torch.from_numpy(np.asarray(df_train.iloc[:,6:]))
     X_dev_in = torch.from_numpy(np.asarray(df_dev_in.iloc[:,6:]))
 
     lab_to_ind = get_lab_to_ind(df_train)
