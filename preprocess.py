@@ -114,8 +114,8 @@ if __name__ == '__main__':
     print(df_train.head())
 
     # Save modified dataframes
-    df_train.to_csv(f'{args.out_dir}/train.csv')
-    df_dev_in.to_csv(f'{args.out_dir}/dev_in.csv')
-    df_dev_out.to_csv(f'{args.out_dir}/dev_out.csv')
-    df_eval_in.to_csv(f'{args.out_dir}/eval_in.csv')
-    df_eval_out.to_csv(f'{args.out_dir}/eval_out.csv')
+    df_train.to_csv(f'{args.out_dir}/train.csv', index=False)
+    df_dev_in.to_csv(f'{args.out_dir}/dev_in.csv', index=False)
+    df_dev_out.to_csv(f'{args.out_dir}/dev_out.csv', index=False)
+    df_eval_in.to_csv(f'{args.out_dir}/eval_in.csv', index=False)
+    df_eval_out.to_csv(f'{args.out_dir}/eval_out.csv', index=False)
