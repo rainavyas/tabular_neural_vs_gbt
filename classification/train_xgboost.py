@@ -18,7 +18,7 @@ def get_lab_to_ind(data_df):
 
 def main():
 
-    parser = argparse.ArgumentParser(description='Train catboost.')
+    parser = argparse.ArgumentParser(description='Train xgboost.')
     parser.add_argument('train_path', type=str, help='Path to train data')
     parser.add_argument('dev_in_path', type=str, help='Path to dev_in data')
     parser.add_argument('save_dir_path', type=str, help='Path to directory to save')
@@ -65,7 +65,7 @@ def main():
         'reg_alpha':3,
         'reg_lambda':0,
         'scale_pos_weight':1,
-        'seed':SEED,
+        'seed':args.seed,
         'subsample':0.75,
         'verbosity':1,
         'n_estimators':75 # number of epochs
@@ -77,7 +77,7 @@ def main():
     model.fit(X_train, y_train, eval_metric=['mlogloss', 'merror'], eval_set=[(X_train, y_train), (X_dev_in, y_dev_in)], early_stopping_rounds=10, verbose=1)
 
     # Save
-    pickle.dump(model, open(f'{args.save_dir_path}/seed{SEED}.dat', "wb"))
+    pickle.dump(model, open(f'{args.save_dir_path}/seed{args.seed}.dat', "wb"))
 
 if __name__ == '__main__':
     main()
