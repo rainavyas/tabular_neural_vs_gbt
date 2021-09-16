@@ -66,7 +66,7 @@ def eval_calibration(labels, probs, save_path=None, bins=10):
     brier = np.mean((1.0-likelihoods)**2)
 
     ece, mce = classification_calibration(labels,probs, bins=bins, save_path=save_path)
-    return np.round(nll,2), np.round(brier,2), np.round(ece,2), np.round(mce,2)
+    return np.round(nll,2), np.round(brier,2), np.round(ece,2), np.round(mce,2), np.round(macro_nll,2)
 
 
 
