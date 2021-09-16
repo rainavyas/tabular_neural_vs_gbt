@@ -46,11 +46,12 @@ def classification_calibration(labels, probs, bins=10, save_path=None):
         plt.close()
     return np.round(ECE * 100.0, 2), np.round(MCE * 100.0, 2)
 
-def get_macro_nll(labels, probs, num_classes=9):
+def get_macro_nll(labels, probs):
     '''
     Aeverage Negative-log likelihood per class,
     then averaged over classes
     '''
+    num_classes = probs.shape[-1]
     likelihoods = probs[labels]
     nll_by_class = []
     for i in range(num_classes):
