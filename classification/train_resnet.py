@@ -1,15 +1,22 @@
-import argparse
-import os
-import sys
+import rtdl
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
 import pandas as pd
 import numpy as np
-from scipy import stats
-from typing import Dict
-import sklearn.preprocessing
-import torch 
-import torch.nn as nn
+import argparse
 from torch.utils.data import TensorDataset
 from torch.utils.data import DataLoader
+from scipy import stats
+import numpy as np
+
+
+
+def apply_model(model, x_num, x_cat=None):
+    '''
+    FTTransformer expects numerical and categorical inputs separately
+    '''
+    return model(x_num, x_cat) if isinstance(model, rtdl.FTTransformer) else model(x_num)
 
 class AverageMeter(object):
     """Computes and stores the average and current value"""
@@ -42,7 +49,7 @@ def accuracy_topk(output, target, k=1):
       res_total += acc
     return res_total*100
 
-def train(train_loader, model, criterion, optimizer, epoch, device, print_freq=500):
+def train(train_loader, model, criterion, optimizer, epoch, device, print_freq=2000):
     '''
     Run one train epoch
     '''
@@ -58,7 +65,7 @@ def train(train_loader, model, criterion, optimizer, epoch, device, print_freq=5
         target = target.to(device)
 
         # Forward pass
-        logits = model(x)
+        logits = apply_model(model, x)
         loss = criterion(logits, target)
 
         # Backward pass and update
@@ -96,7 +103,7 @@ def eval(val_loader, model, criterion, device):
         target = target.to(device)
 
         # Forward pass
-        logits = model(x)
+        logits = apply_model(model, x)
         loss = criterion(logits, target)
 
         # measure accuracy and record loss
@@ -108,57 +115,6 @@ def eval(val_loader, model, criterion, device):
             'Accuracy ({prec.avg:.3f})\n'.format(
               loss=losses, prec=accs))
 
-class ResNetBlock(nn.Module):
-    '''
-    Residual Block
-    '''
-    def __init__(self, num_feats, layer_size, dropout_p):
-        super().__init__()
-        self.block = nn.Sequential(
-            nn.BatchNorm1d(num_features=num_feats),
-            nn.Linear(num_feats, layer_size),
-            nn.ReLU(),
-            nn.Dropout(dropout_p),
-            nn.Linear(layer_size, num_feats),
-            nn.Dropout(dropout_p)
-        )
-    def forward(self, x):
-        return x + self.block(x)
-    
-
-class ResNet(nn.Module):
-    '''
-        ResNet
-    '''
-    def __init__(self, num_feats=123, num_classes=9):
-        super().__init__()
-        
-        layer_size=512
-        dropout_p = 0.25
-        
-        self.predictor = nn.Sequential(
-            ResNetBlock(num_feats, layer_size, dropout_p),
-            ResNetBlock(num_feats, layer_size, dropout_p),
-            ResNetBlock(num_feats, layer_size, dropout_p),
-            ResNetBlock(num_feats, layer_size, dropout_p),
-            ResNetBlock(num_feats, layer_size, dropout_p),
-            ResNetBlock(num_feats, layer_size, dropout_p),
-            ResNetBlock(num_feats, layer_size, dropout_p),
-            nn.BatchNorm1d(num_features=num_feats),
-            nn.ReLU(),
-            nn.Linear(num_feats, num_classes)
-        )
-    def forward(self, x):
-        return self.predictor(x)
-
-
-def get_default_device():
-    if torch.cuda.is_available():
-        print("Got CUDA!")
-        return torch.device('cuda')
-    else:
-        print("No CUDA found")
-        return torch.device('cpu')
 
 def get_lab_to_ind(data_df):
     '''
@@ -170,36 +126,43 @@ def get_lab_to_ind(data_df):
         lab_to_ind[lab] = i
     return lab_to_ind
 
+def get_default_device():
+    if torch.cuda.is_available():
+        print("Got CUDA!")
+        return torch.device('cuda')
+    else:
+        print("No CUDA found")
+        return torch.device('cpu')
 
 def main():
 
-    parser = argparse.ArgumentParser(description='Train ResNet.')
+    parser = argparse.ArgumentParser(description='Train FTTransformer.')
     parser.add_argument('train_path', type=str, help='Path to train data')
     parser.add_argument('dev_in_path', type=str, help='Path to dev_in data')
-    parser.add_argument('save_dir_path', type=str, help='Path to directory to save')
+    parser.add_argument('--epochs', type=int, default=50, help='Specify the number of epochs to train for')
     parser.add_argument('--seed', type=int, default=1, help='Specify the global random seed')
+    parser.add_argument('--batch_size', type=int, default=1024, help='Batch size')
+    parser.add_argument('--save_dir', type=str, help='Load path to which trained model will be saved')
 
     args = parser.parse_args()
 
-    # Set Seed
-    torch.manual_seed(args.seed)
-    torch.cuda.manual_seed_all(args.seed)
-    np.random.seed(args.seed)
-
-    # Save the command run
-    if not os.path.isdir('CMDs'):
-        os.mkdir('CMDs')
-    with open('CMDs/train_resnet.cmd', 'a') as f:
-        f.write(' '.join(sys.argv)+'\n')
-    
     df_train = pd.read_csv(args.train_path)
     df_dev_in = pd.read_csv(args.dev_in_path)
 
-    X_train = torch.FloatTensor(np.asarray(df_train.iloc[:,6:]))
-    X_dev_in = torch.FloatTensor(np.asarray(df_dev_in.iloc[:,6:]))
+    torch.manual_seed(args.seed)
+    torch.cuda.manual_seed_all(args.seed)
+    np.random.seed(args.seed)
+    seed = args.seed
 
     lab_to_ind = get_lab_to_ind(df_train)
-    batch_size = 1024
+    batch_size = args.batch_size
+
+    X_train_np = np.asarray(df_train.iloc[:,6:])
+    X_dev_in_np = np.asarray(df_dev_in.iloc[:,6:])
+
+    X_train = torch.FloatTensor(X_train_np)
+    X_dev_in = torch.FloatTensor(X_dev_in_np)
+
 
     # Train
     y_train = np.asarray(df_train['fact_cwsm_class'])
@@ -216,23 +179,39 @@ def main():
     dev_in_dl = DataLoader(dev_in_ds, batch_size=batch_size, shuffle=True)
 
 
-    # Get the device
     device = get_default_device()
 
-    # Define the model
-    model = ResNet()
+    # Create the Feature Transformer Model
+
+    model = rtdl.ResNet.make_baseline(
+        d_in=X_train.shape[1],
+        d_main=512,
+        d_hidden=1024,
+        dropout_first=0.0,
+        dropout_second=0.0,
+        n_blocks=4,
+        d_out=9,
+    )
+    lr = 0.0001
+    weight_decay = 0.0
+
     model.to(device)
 
-    # optimizer
-    lr = 0.0001
-    weight_decay = 0.9
-    optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
+    optimizer = (
+        model.make_default_optimizer()
+        if isinstance(model, rtdl.FTTransformer)
+        else torch.optim.AdamW(model.parameters(), lr=lr,
+                              weight_decay=weight_decay)
+    )
 
-    # criterion
+
+
+    # create loss function criterion
     criterion = nn.CrossEntropyLoss().to(device)
 
+
     # Train
-    epochs = 30
+    epochs = args.epochs
     for epoch in range(epochs):
 
         # train for one epoch
@@ -241,9 +220,14 @@ def main():
 
         # evaluate on validation set
         eval(dev_in_dl, model, criterion, device)
-    
+
+
+
+
     state = model.state_dict()
-    torch.save(state, f'{args.save_dir_path}/seed{args.seed}.th')
+    torch.save(state, f'{args.save_dir}/model{args.seed}.th')
+
+
 
 
 if __name__ == '__main__':
