@@ -55,7 +55,7 @@ def main():
         'colsample_bynode':0.75,
         'colsample_bytree':0.75,
         'gamma':0,
-        'learning_rate':0.5,
+        'learning_rate':0.4,
         'max_delta_step':0,
         'max_depth':6,
         'min_child_weight':1,
@@ -68,7 +68,7 @@ def main():
         'seed':args.seed,
         'subsample':0.75,
         'verbosity':1,
-        'n_estimators':75 # number of epochs
+        'n_estimators':100 # number of epochs
     }
 
     model = XGBClassifier(**params)
