@@ -22,7 +22,6 @@ import sys
 import numpy as np
 import pandas as pd
 import catboost
-from train_mlp import get_lab_to_ind
 
 def get_predictions(X, model):
     '''
@@ -30,6 +29,16 @@ def get_predictions(X, model):
     Classification: [num_samples x num_classes]
     '''
     return model.predict_proba(X)
+
+def get_lab_to_ind(data_df):
+    '''
+    Prepare a label to index map
+    '''
+    y_fact = set(list(data_df['fact_cwsm_class']))
+    lab_to_ind = {}
+    for i, lab in enumerate(y_fact):
+        lab_to_ind[lab] = i
+    return lab_to_ind
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='catboost predict.')
