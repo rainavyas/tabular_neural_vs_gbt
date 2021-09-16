@@ -62,7 +62,7 @@ def main():
         'n_jobs':1,
         'objective':'multi:softprob',
         'random_state':0,
-        'reg_alpha':0.3,
+        'reg_alpha':3,
         'reg_lambda':0,
         'scale_pos_weight':1,
         'seed':SEED,
