@@ -69,7 +69,7 @@ if __name__ == '__main__':
     # Generate prediction file for each model
     for seed in range(1, ensemble_size+1):
        
-        model = pickle.load(f'{args.trained_models_dir}/seed{seed}.dat', 'rb')
+        model = pickle.load(open(f'{args.trained_models_dir}/seed{seed}.dat', 'rb'))
 
         lab_to_ind = get_lab_to_ind(df)
 
