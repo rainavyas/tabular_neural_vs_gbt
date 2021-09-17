@@ -3,7 +3,7 @@ import numpy as np
 import argparse
 import os
 import sys
-from lgbm import LGBMClassifier
+from lightgbm import LGBMClassifier
 import pickle
 
 def get_lab_to_ind(data_df):
