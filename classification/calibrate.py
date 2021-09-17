@@ -56,7 +56,10 @@ def get_macro_nll(labels, probs):
     nll_by_class = []
     for i in range(num_classes):
         relevant_likelihoods = likelihoods[labels[:]==i]
-        nll_by_class.append(np.mean(-np.log(relevant_likelihoods)))
+        nll_this_class = np.mean(-np.log(relevant_likelihoods))
+        if nll_this_class.isnan():
+            nll_this_class = 0
+        nll_by_class.append(nll_this_class)
     return np.mean(np.asarray(nll_by_class))
 
 def eval_calibration(labels, probs, save_path=None, bins=10):
