@@ -11,7 +11,7 @@ python3.7 or above
 
 `pip install numpy`
 
-### FT-Transformer
+### FT-Transformer / MLP / ResNet
 
 `pip install rtdl`
 
@@ -23,12 +23,11 @@ python3.7 or above
 
 `pip install scikit-learn`
 
-### MLP / ResNet
-
-`pip install torch`
-
 ### CatBoost
 
 `pip install catboost`
 
+### LightGBM
+
+`pip install lightgbm'
 
