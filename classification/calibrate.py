@@ -57,7 +57,7 @@ def get_macro_nll(labels, probs):
     for i in range(num_classes):
         relevant_likelihoods = likelihoods[labels[:]==i]
         nll_this_class = np.mean(-np.log(relevant_likelihoods))
-        if nll_this_class.isnan():
+        if np.isnan(nll_this_class):
             nll_this_class = 0
         nll_by_class.append(nll_this_class)
     return np.mean(np.asarray(nll_by_class))
