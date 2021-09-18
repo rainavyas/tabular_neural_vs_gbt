@@ -67,9 +67,10 @@ def main():
     model = LGBMClassifier(**params)
 
     # Train
-    model.fit(X_train, y_train, eval_metric=['multi_logloss', 'multi_error'], eval_set=[(X_train, y_train), (X_dev_in, y_dev_in)], early_stopping_rounds=25, verbose=1)
+    model.fit(X_train, y_train, eval_metric=['multi_logloss', 'multi_error'], eval_set=[(X_train, y_train), (X_dev_in, y_dev_in)], early_stopping_rounds=100, verbose=1)
 
     # Save
+    print("Best Iteration", model.booster_.best_iteration)
     model.booster_.save_model(f'{args.save_dir_path}/seed{args.seed}.txt', num_iteration=model.booster_.best_iteration)
 
 if __name__ == '__main__':
