@@ -24,7 +24,7 @@ def main():
     parser.add_argument('save_dir_path', type=str, help='Path to directory to save')
     parser.add_argument('--seed', type=int, default=1, help='Specify the global random seed')
     parser.add_argument('--lr', type=float, default=0.1, help='Specify the learning rate')
-    parser.add_argument('--num_leaves', type=float, default=256, help='Specify the number of leaves')
+    parser.add_argument('--num_leaves', type=int, default=256, help='Specify the number of leaves')
 
     args = parser.parse_args()
 
