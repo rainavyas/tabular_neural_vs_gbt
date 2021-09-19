@@ -122,7 +122,7 @@ def main():
     parser = argparse.ArgumentParser(description='Train FTTransformer.')
     parser.add_argument('train_path', type=str, help='Path to train data')
     parser.add_argument('dev_in_path', type=str, help='Path to dev_in data')
-    parser.add_argument('--epochs', type=int, default=100, help='Specify the number of epochs to train for')
+    parser.add_argument('--epochs', type=int, default=60, help='Specify the number of epochs to train for')
     parser.add_argument('--seed', type=int, default=1, help='Specify the global random seed')
     parser.add_argument('--batch_size', type=int, default=1024, help='Batch size')
     parser.add_argument('--save_dir', type=str, help='Load path to which trained model will be saved')
@@ -168,7 +168,7 @@ def main():
 
     model = rtdl.MLP.make_baseline(
         d_in=X_train.shape[1],
-        d_layers = [512,512,512,512],
+        d_layers = [384,384,384],
         dropout=0.0,
         d_out=2
     )
