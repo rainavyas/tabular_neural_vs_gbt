@@ -23,7 +23,7 @@ from sklearn.metrics import mean_absolute_error
 import argparse
 import os
 import sys
-#from calibration.calibrate import eval_calibration
+from calibrate import gaussian_negative_log_likelihood as gnll
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='eval regression')
@@ -41,12 +41,15 @@ if __name__ == '__main__':
 
     # Load preds
     all_means = []
+    all_variances = []
     ensemble_size = 10
     for seed in range(1, ensemble_size+1):
         all_means.append(np.load(f'{args.preds_dir}/mean{seed}.npy'))
-    
+        all_variances.append(np.load(f'{args.preds_dir}/variance{seed}.npy'))    
+
     # Ensemble results
     ens_preds = np.mean(np.stack(all_means), axis=0)
+    ens_variances = np.mean(np.stack(all_variances), axis=0)
     rmse = math.sqrt(mean_squared_error(labels, ens_preds))
     mae = mean_absolute_error(labels, ens_preds)
     print('---------------')
@@ -54,37 +57,26 @@ if __name__ == '__main__':
     print('RMSE:', rmse)
     print('MAE:', mae)
     print('---------------')
-    #nll, _, ece, mce = eval_calibration(labels, ens_preds)
-    #print('nll:', nll)
-    #print('---------------')
-    #print('---------------')
+    nll = gnll(ens_preds, ens_variances, labels)
+    print('nll:', nll)
+    print('---------------')
+    print('---------------')
 
     # Single seed results
     rmses = []
     maes = []
-    #nlls, eces, mces = [], [], []
-    for preds in all_means:
+    nlls = []
+    for preds, variances in zip(all_means, all_variances):
         rmses.append(math.sqrt(mean_squared_error(labels, preds)))
         maes.append(mean_absolute_error(labels, preds))
-        #nll, _, ece, mce = eval_calibration(labels, preds)
-        #nlls.append(nll)
-        #eces.append(ece)
-        #mces.append(mce)
+        nlls.append(gnll(preds, variances, labels))
     rmses = np.asarray(rmses)
     maes = np.asarray(maes)
-    #nlls = np.asarray(nlls)
-    #eces = np.asarray(eces)
-    #mces = np.asarray(mces)
+    nlls = np.asarray(nlls)
     print('---------------')
     print('Single')
     print(f'RMSE: {rmses.mean()} +- {rmses.std()}')
     print(f'MAE: {maes.mean()} +- {maes.std()}')
     print('---------------')
-    #print('nll:', nlls.mean(), nlls.std())
-    #print('ece:', eces.mean(), eces.std())
-    #print('mce:', mces.mean(), mces.std())
-    #print('---------------')
-    #print(f'nll: {nlls.mean()} +- {nlls.std()}')
-    #print(f'ece: {eces.mean()} +- {eces.std()}')
-    #print(f'mce: {mces.mean()} +- {mces.std()}')
+    print(f'nll: {nlls.mean()} +- {nlls.std()}')
     print('---------------')
