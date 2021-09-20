@@ -61,7 +61,7 @@ if __name__ == '__main__':
         # get prediction
         X = df.iloc[:,6:]
         preds = np.asarray(get_predictions(X, model))
-        print(preds.shape)
+        print(preds[0])
         np.save(f'{args.out_dir}/{seed}.npy', preds)
 
         print('Done seed', seed)
