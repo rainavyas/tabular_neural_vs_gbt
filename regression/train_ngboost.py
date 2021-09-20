@@ -49,7 +49,7 @@ def main():
     params = {
         'Dist' : Normal,
         'Base' : base,
-        'natural_gradient' : True,
+        'natural_gradient' : False,
         'random_state' : args.seed,
         'minibatch_frac' : 0.5,
         'n_estimators' : 500,
