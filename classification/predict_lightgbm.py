@@ -10,7 +10,7 @@ def get_predictions(X, model):
     Returns predictions for specified model
     Classification: [num_samples x num_classes]
     '''
-    return model.predict_proba(X)
+    return model.predict(X)
 
 def get_lab_to_ind(data_df):
     '''
@@ -61,6 +61,7 @@ if __name__ == '__main__':
         # get prediction
         X = df.iloc[:,6:]
         preds = np.asarray(get_predictions(X, model))
+        print(preds.shape)
         np.save(f'{args.out_dir}/{seed}.npy', preds)
 
         print('Done seed', seed)
