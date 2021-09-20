@@ -34,4 +34,5 @@ python3.7 or above
 ### NGBoost
 
 `pip install ngboost'
+`pip install importlib-metadata'
 
