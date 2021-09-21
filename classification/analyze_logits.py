@@ -45,4 +45,5 @@ if __name__ == '__main__':
     _, bins, _ = plt.hist(in_domain_logits, alpha=0.5, bins=50, density=True, label='in domain')
     _ = plt.hist(out_domain_logits, bins=bins, alpha=0.5, density=True, label='out domain')
     plt.legend()
+    plt.xlabel('Max Logit')
     plt.savefig(args.out_file)
