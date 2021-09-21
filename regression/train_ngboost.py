@@ -52,7 +52,7 @@ def main():
         'natural_gradient' : True,
         'random_state' : args.seed,
         'minibatch_frac' : 0.5,
-        'n_estimators' : 500,
+        'n_estimators' : 100,
         'learning_rate' : args.lr,
         'verbose' : True,
         'verbose_eval' : 5,
