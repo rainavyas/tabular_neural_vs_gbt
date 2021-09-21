@@ -42,7 +42,7 @@ if __name__ == '__main__':
 
     # Select largest logits per sample
     in_domain_logits = np.max(in_domain_logits, axis=1)
-    out_domain_logits = np.max(in_domain_logits, axis=1)
+    out_domain_logits = np.max(out_domain_logits, axis=1)
 
     # Histogram distribution
     _, bins, _ = plt.hist(in_domain_logits, bins=50, density=True, label='in domain')
