@@ -36,13 +36,13 @@ if __name__ == '__main__':
     # Load logits - use only seed 1
     in_domain_logits = np.load(f'{args.in_preds_dir}/logits1.npy')
     out_domain_logits = np.load(f'{args.out_preds_dir}/logits1.npy')
-    
+
     # Select largest logits per sample
     in_domain_logits = np.max(in_domain_logits, axis=1)
     out_domain_logits = np.max(out_domain_logits, axis=1)
 
     # Histogram distribution
-    _, bins, _ = plt.hist(in_domain_logits, bins=50, density=True, label='in domain')
+    _, bins, _ = plt.hist(in_domain_logits, alpha=0.5, bins=50, density=True, label='in domain')
     _ = plt.hist(out_domain_logits, bins=bins, alpha=0.5, density=True, label='out domain')
     plt.legend()
     plt.savefig(args.out_file)
