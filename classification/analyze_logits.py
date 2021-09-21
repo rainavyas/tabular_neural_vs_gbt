@@ -24,7 +24,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='eval classification')
     parser.add_argument('in_preds_dir', type=str, help='Path to dir of in-domain predictions')
     parser.add_argument('out_preds_dir', type=str, help='Path to dir of out-domain predictions')
-    parser.add_argument('out_file', type='str', help='output .png histogram')
+    parser.add_argument('out_file', type=str, help='output .png histogram')
 
     args = parser.parse_args()
     # Save the command run
