@@ -37,6 +37,9 @@ if __name__ == '__main__':
     in_domain_logits = np.load(f'{args.in_preds_dir}/logits1.npy')
     out_domain_logits = np.load(f'{args.out_preds_dir}/logits1.npy')
 
+    print(in_domain_logits.shape)
+    print(in_domain_logits[0])
+
     # Select largest logits per sample
     in_domain_logits = np.max(in_domain_logits, axis=1)
     out_domain_logits = np.max(in_domain_logits, axis=1)
