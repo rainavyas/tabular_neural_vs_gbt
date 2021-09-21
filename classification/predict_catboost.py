@@ -14,6 +14,16 @@ generates content with following contents:
 
 where each seed prediction file contains a numpy array: [num_samples x num_classes]
 
+Also generate logit prediction files:
+
+- logits1.npy
+- logits2.npy
+.
+.
+.
+- logits10.npy
+where each file is a numpy array: [num_samples x num_classes]
+
 '''
 
 import argparse
@@ -22,6 +32,13 @@ import sys
 import numpy as np
 import pandas as pd
 import catboost
+
+def get_logits(X, model):
+    '''
+    Returns raw scores predicted by the model
+    [num_samples x num_classes]
+    '''
+    return model.predict(prediction_type='RawFormulaVal')
 
 def get_predictions(X, model):
     '''
@@ -82,5 +99,11 @@ if __name__ == '__main__':
         X = df.iloc[:,6:]
         preds = np.asarray(get_predictions(X, model))
         np.save(f'{args.out_dir}/{seed}.npy', preds)
+
+        # get logits
+        logits = np.asarray(get_logits(X, model))
+        print(logits.shape)
+        print(logits[0])
+        np.save(f'{args.out_dir}/logits{seed}.npy', logits)
 
         print('Done seed', seed)
