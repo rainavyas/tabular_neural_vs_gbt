@@ -38,7 +38,7 @@ def get_logits(X, model):
     Returns raw scores predicted by the model
     [num_samples x num_classes]
     '''
-    return model.predict(prediction_type='RawFormulaVal')
+    return model.predict(X, prediction_type='RawFormulaVal')
 
 def get_predictions(X, model):
     '''
