@@ -102,8 +102,6 @@ if __name__ == '__main__':
 
         # get logits
         logits = np.asarray(get_logits(X, model))
-        print(logits.shape)
-        print(logits[0])
         np.save(f'{args.out_dir}/logits{seed}.npy', logits)
 
         print('Done seed', seed)
