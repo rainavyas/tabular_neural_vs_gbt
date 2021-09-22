@@ -69,7 +69,7 @@ if __name__ == '__main__':
         f.write(' '.join(sys.argv)+'\n')
     
     # labels
-    labels = np.load(f'{args.preds_dir1}/targets.npy')
+    labels = np.load(f'{args.preds_dir}/targets.npy')
 
     # Load preds
     all_preds = []
