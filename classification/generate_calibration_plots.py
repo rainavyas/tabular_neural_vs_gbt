@@ -23,7 +23,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def classification_calibration(labels, probs, bins=10):
-    n_classes = np.float(probs.shape[-1])
     lower = 0
     preds = np.argmax(probs, axis=1)
     total = labels.shape[0]
@@ -51,7 +50,7 @@ def classification_calibration(labels, probs, bins=10):
         accs[i] = acc
         upper += increment
         lower += increment
-    ECE /= np.float(total)
+    ECE /= float(total)
     MCE = np.max(np.abs(gaps))
     accs[-1] = 1.0
     return confs, accs
