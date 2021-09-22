@@ -88,7 +88,8 @@ if __name__ == '__main__':
     mids = ens_confs + (increment/2)
     diffs = mids - ens_accs
     mids = np.concatenate((np.asarray([0.0]), mids, np.asarray([1.0])))
-    plt.bar(ens_confs, ens_accs, width=increment, align='edge')
+    plt.bar(ens_confs, ens_accs, width=increment, align='edge', color='k')
+    plt.bar(ens_confs, diffs, bottom=ens_accs, color='o')
     plt.plot(mids, mids, linestyle='-', color='r')
     plt.xlabel('Confidence')
     plt.ylabel('Accuracy')
