@@ -77,9 +77,11 @@ if __name__ == '__main__':
         all_preds.append(np.load(f'{args.preds_dir}/{seed}.npy'))
     
     # preds
+    print("Getting preds")
     ens_preds = np.mean(np.stack(all_preds), axis=0)
     single_preds = all_preds[0]
 
+    print("Plotting")
     # Ensemble plot
     ens_confs, ens_accs = classification_calibration(labels, ens_preds)
     plt.bar(ens_confs, ens_accs, width=1.0)
