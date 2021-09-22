@@ -84,7 +84,7 @@ if __name__ == '__main__':
     ens_confs, ens_accs = classification_calibration(labels, ens_preds)
     print(ens_accs)
     plt.bar(ens_confs, ens_accs, width=1.0)
-    plt.plot(ens_confs, ens_confs)
+    # plt.plot(ens_confs, ens_confs)
     plt.xlabel('Confidence')
     plt.ylabel('Accuracy')
     plt.savefig(f'{args.out_prefix}_ensemble.png')
