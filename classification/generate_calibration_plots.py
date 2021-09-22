@@ -82,9 +82,10 @@ if __name__ == '__main__':
 
     # Ensemble plot
     ens_confs, ens_accs = classification_calibration(labels, ens_preds)
-    print(ens_confs)
-    plt.bar(ens_confs, ens_accs, width=1.0)
-    # plt.plot(ens_confs, ens_confs)
+    ens_confs = ens_confs[:-1]
+    ens_accs = ens_accs[:-1]
+    plt.bar(ens_confs, ens_accs, width=1.0, align='edge')
+    plt.plot(ens_confs, ens_confs)
     plt.xlabel('Confidence')
     plt.ylabel('Accuracy')
     plt.savefig(f'{args.out_prefix}_ensemble.png')
