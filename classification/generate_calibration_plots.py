@@ -75,7 +75,7 @@ if __name__ == '__main__':
     all_preds = []
     ensemble_size = 10
     for seed in range(1, ensemble_size+1):
-        all_preds.append(np.load(f'{args.preds_dir1}/{seed}.npy'))
+        all_preds.append(np.load(f'{args.preds_dir}/{seed}.npy'))
     
     # preds
     ens_preds = np.mean(np.stack(all_preds), axis=0)
