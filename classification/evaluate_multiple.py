@@ -2,7 +2,7 @@
 Peforms general classification evaluation from a predictions file
 (single seed and ensemble results)
 
-Expects to be passed a directory with following contents:
+Expects to be passed two directories with following contents:
 
 - targets.npy
 - 1.npy
@@ -56,7 +56,8 @@ def get_avg_f1(preds, labels):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='eval classification')
-    parser.add_argument('preds_dir', type=str, help='Path to dir of predictions')
+    parser.add_argument('preds_dir1', type=str, help='Path to dir of predictions')
+    parser.add_argument('preds_dir2', type=str, help='Path to dir of predictions')
 
     args = parser.parse_args()
     # Save the command run
@@ -66,13 +67,14 @@ if __name__ == '__main__':
         f.write(' '.join(sys.argv)+'\n')
     
     # labels
-    labels = np.load(f'{args.preds_dir}/targets.npy')
+    labels = np.load(f'{args.preds_dir1}/targets.npy')
 
     # Load preds
     all_preds = []
     ensemble_size = 10
     for seed in range(1, ensemble_size+1):
-        all_preds.append(np.load(f'{args.preds_dir}/{seed}.npy'))
+        all_preds.append(np.load(f'{args.preds_dir1}/{seed}.npy'))
+        all_preds.append(np.load(f'{args.preds_dir2}/{seed}.npy'))
     
     # Ensemble results
     ens_preds = np.mean(np.stack(all_preds), axis=0)
