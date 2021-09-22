@@ -82,7 +82,7 @@ if __name__ == '__main__':
 
     # Ensemble plot
     ens_confs, ens_accs = classification_calibration(labels, ens_preds)
-    print(ens_confs)
+    print(ens_accs)
     plt.bar(ens_confs, ens_accs, width=1.0)
     plt.plot(ens_confs, ens_confs)
     plt.xlabel('Confidence')
