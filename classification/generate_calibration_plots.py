@@ -92,6 +92,7 @@ if __name__ == '__main__':
     mids = np.concatenate((np.asarray([0.0]), mids, np.asarray([1.0])))
     plt.plot(mids, mids, linestyle='--', color='k', linewidth=2.0)
     plt.xlim([0.0,1.0])
+    plt.ylim([0,1])
     plt.xlabel('Confidence')
     plt.ylabel('Accuracy')
     plt.savefig(f'{args.out_prefix}_ensemble.png')
