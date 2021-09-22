@@ -34,17 +34,16 @@ def classification_calibration(labels, probs, bins=10):
     confs = np.arange(0, 1.01, increment)
     ECE = 0.0
     for i in range(bins):
+        print(i)
         ind1 = probs >= lower
         ind2 = probs < upper
         ind = np.where(np.logical_and(ind1, ind2))[0]
         lprobs = probs[ind]
         lpreds = preds[ind]
         llabels = labels[ind]
-        try:
-            acc = np.mean(np.asarray(llabels == lpreds, dtype=np.float32))
-            prob = np.mean(lprobs)
-        except:
-        # if np.isnan(acc):
+        acc = np.mean(np.asarray(llabels == lpreds, dtype=np.float32))
+        prob = np.mean(lprobs)
+        if np.isnan(acc):
             acc = 0.0
             prob = 0.0
         ECE += np.abs(acc - prob) * float(lprobs.shape[0])
