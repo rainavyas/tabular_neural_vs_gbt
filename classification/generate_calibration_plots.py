@@ -59,7 +59,7 @@ def classification_calibration(labels, probs, bins=10):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='generate plots')
     parser.add_argument('preds_dir', type=str, help='Path to dir of predictions')
-    parser.add_argument('out_dir', type=str, help='Path to dir to save plots')
+    parser.add_argument('out_prefix', type=str, help='Path to dir to save plots and prefix')
 
     args = parser.parse_args()
     # Save the command run
@@ -87,6 +87,6 @@ if __name__ == '__main__':
     plt.plot(ens_confs, ens_confs)
     plt.xlabel('Confidence')
     plt.ylabel('Accuracy')
-    plt.savefig(f'{args.out_dir}/ensemble.png')
+    plt.savefig(f'{args.out_prefix}_ensemble.png')
 
 
