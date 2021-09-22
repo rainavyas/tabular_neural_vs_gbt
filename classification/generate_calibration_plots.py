@@ -97,4 +97,21 @@ if __name__ == '__main__':
     plt.ylabel('Accuracy')
     plt.savefig(f'{args.out_prefix}_ensemble.png')
 
+    # Single plot
+    increment = 0.1
+    sin_confs, sin_accs = classification_calibration(labels, single_preds)
+    sin_confs = sin_confs[:-1]
+    sin_accs = sin_accs[:-1]
+    mids = sin_confs + (increment/2)
+    diffs = mids - sin_accs
+    plt.bar(sin_confs, sin_accs, width=increment, align='edge', color='k')
+    plt.bar(mids, diffs, bottom=ens_accs, color='r', width=increment/15)
+    mids = np.concatenate((np.asarray([0.0]), mids, np.asarray([1.0])))
+    plt.plot(mids, mids, linestyle='--', color='green', linewidth=2.0)
+    plt.xlim([0.0,1.0])
+    plt.ylim([0,1])
+    plt.xlabel('Confidence')
+    plt.ylabel('Accuracy')
+    plt.savefig(f'{args.out_prefix}_single.png')
+
 
