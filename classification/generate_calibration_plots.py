@@ -87,10 +87,11 @@ if __name__ == '__main__':
     ens_accs = ens_accs[:-1]
     mids = ens_confs + (increment/2)
     diffs = mids - ens_accs
-    plt.bar(ens_confs, ens_accs, width=increment, align='edge', color='c')
+    plt.bar(ens_confs, ens_accs, width=increment, align='edge', color='blue')
     plt.bar(mids, diffs, bottom=ens_accs, color='r', width=increment/10)
     mids = np.concatenate((np.asarray([0.0]), mids, np.asarray([1.0])))
-    plt.plot(mids, mids, linestyle='-', color='k')
+    plt.plot(mids, mids, linestyle='--', color='k')
+    plt.xlim([0.0,1.01])
     plt.xlabel('Confidence')
     plt.ylabel('Accuracy')
     plt.savefig(f'{args.out_prefix}_ensemble.png')
