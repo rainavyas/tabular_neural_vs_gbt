@@ -81,11 +81,14 @@ if __name__ == '__main__':
     single_preds = all_preds[0]
 
     # Ensemble plot
+    increment = 0.1
     ens_confs, ens_accs = classification_calibration(labels, ens_preds)
     ens_confs = ens_confs[:-1]
     ens_accs = ens_accs[:-1]
-    plt.bar(ens_confs, ens_accs, width=0.1, align='edge')
-    plt.plot(ens_confs, ens_confs)
+    mids = ens_confs + (increment/2)
+    diffs = mids - ens_accs
+    plt.bar(ens_confs, ens_accs, width=increment, align='edge')
+    plt.plot(mids, mids, linestyle='-', color='r')
     plt.xlabel('Confidence')
     plt.ylabel('Accuracy')
     plt.savefig(f'{args.out_prefix}_ensemble.png')
