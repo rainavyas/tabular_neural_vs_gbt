@@ -3,8 +3,9 @@ import os
 import sys
 import pandas as pd
 from ngboost import NGBRegressor
+from ngboost.learners import default_tree_learner
 from ngboost.distns import Normal
-from sklearn.tree import DecisionTreeRegressor
+from ngboost.scores import MLE
 import pickle
 
 def main():
@@ -34,36 +35,11 @@ def main():
     y_train = df_train['fact_temperature']
     y_dev_in = df_dev_in['fact_temperature']
 
-    # Define base
-    base = DecisionTreeRegressor(
-        criterion = "friedman_mse",
-        min_samples_split = 2,
-        min_samples_leaf = 1,
-        min_weight_fraction_leaf = 0.0,
-        max_depth = args.depth,
-        splitter = 'best',
-        random_state = args.seed
-    )
+    model_ngb = NGBRegressor(n_estimators=650,  natural_gradient=True, learning_rate = 0.01,Base=default_tree_learner, Dist=Normal, Score=MLE, verbose_eval =50)
+    model_ngb.fit(X_train, y_train, X_val = X_dev_in, Y_val = y_dev_in, early_stopping_rounds = 10)
 
-    # Define parameters
-    params = {
-        'Dist' : Normal,
-        'Base' : base,
-        'natural_gradient' : True,
-        'random_state' : args.seed,
-        'minibatch_frac' : 0.5,
-        'n_estimators' : 500,
-        'learning_rate' : args.lr,
-        'verbose' : True,
-        'verbose_eval' : 5,
-        'tol' : 1e-4,
-        'col_sample' : 0.75,
-    }
-    ngb = NGBRegressor(**params)
-    ngb.fit(X_train, y_train, X_val=X_dev_in, Y_val=y_dev_in)
-
-    with open(f'{args.save_dir_path}/seed{args.seed}.p', 'wb') as f:
-        pickle.dump(ngb, f)
+    #with open(f'{args.save_dir_path}/seed{args.seed}.p', 'wb') as f:
+    #    pickle.dump(ngb, f)
 
 if __name__ == '__main__':
     main()
