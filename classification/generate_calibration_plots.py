@@ -96,6 +96,7 @@ if __name__ == '__main__':
     plt.xlabel('Confidence')
     plt.ylabel('Accuracy')
     plt.savefig(f'{args.out_prefix}_ensemble.png')
+    plt.clf()
 
     # Single plot
     increment = 0.1
