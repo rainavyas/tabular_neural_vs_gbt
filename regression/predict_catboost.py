@@ -34,7 +34,7 @@ def get_predictions(X, model):
     Return: array [num_samples x 2],
         where
             num_samples = number of rows in features_df
-            2 = [mean, standard_deviation]
+            2 = [mean, variance]
     
     '''
     return model.predict(X)
@@ -79,7 +79,7 @@ if __name__ == '__main__':
         preds = np.asarray(get_predictions(X, model))
         means = np.squeeze(preds[:,0])
         np.save(f'{args.out_dir}/mean{seed}.npy', means)
-        variances = np.squeeze(preds[:,1])**2
+        variances = np.squeeze(preds[:,1])
         np.save(f'{args.out_dir}/variance{seed}.npy', variances)
 
         print('Done seed', seed)
