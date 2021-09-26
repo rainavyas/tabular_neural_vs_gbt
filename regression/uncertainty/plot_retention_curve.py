@@ -18,6 +18,7 @@ from assessment import calc_uncertainty_regection_curve, f_beta_metrics
 import matplotlib.pyplot as plt
 import matplotlib
 import seaborn as sns
+import pandas as pd
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='eval regression')
@@ -95,13 +96,19 @@ if __name__ == '__main__':
     retention_fractions = np.linspace(0,1,len(ens_retention_mse))
 
     # Plot
+    data_ens = pd.DataFrame(data={'x':retention_fractions, 'y':ens_retention_mse})
+    data_sin = pd.DataFrame(data={'x':retention_fractions, 'y':single_retention_mse})
+
     filename = f'{args.out_prefix}_retention_mse.png'
-    plt.plot(retention_fractions, single_retention_mse, label=f'Single R-AUC: {single_r_auc:.3}')
-    plt.plot(retention_fractions, ens_retention_mse, label=f'Ensemble R-AUC: {ens_r_auc:.3}')
+    sns.set(rc={'figure.figsize':(5,3.3)})
+    sns.lineplot(data=data_sin, x='x', y='y', label=f'Single R-AUC: {single_r_auc:.3}')
+    sns.lineplot(data=data_ens, x='x', y='y', label=f'Ensemble R-AUC: {ens_r_auc:.3}')
     plt.ylabel('MSE')
     plt.xlabel("Retention Fraction")
+    plt.xlim([-0.01,1.01])
+    plt.ylim(bottom=-0.01)
     plt.legend()
-    plt.savefig(filename, bbox_inches='tight')
+    plt.savefig(filename, bbox_inches='tight', dpi=150)
     plt.clf()
 
 
@@ -114,11 +121,17 @@ if __name__ == '__main__':
     retention_fractions = np.linspace(0,1,len(ens_retention_f1))
 
     # Plot
+    data_ens = pd.DataFrame(data={'x':retention_fractions, 'y':ens_retention_f1})
+    data_sin = pd.DataFrame(data={'x':retention_fractions, 'y':single_retention_f1})
+
     filename = f'{args.out_prefix}_retention_f1.png'
-    plt.plot(retention_fractions, single_retention_f1, label=f'Single F1-AUC: {single_f_auc:.3}')
-    plt.plot(retention_fractions, ens_retention_f1, label=f'Ensemble F1-AUC: {ens_f_auc:.3}')
-    plt.ylabel('F1')
+    sns.set(rc={'figure.figsize':(5,3.3)})
+    sns.lineplot(data=data_sin, x='x', y='y', label=f'Single F1-AUC: {single_f_auc:.3}')
+    sns.lineplot(data=data_ens, x='x', y='y', label=f'Ensemble F1-AUC: {ens_f_auc:.3}')
+    plt.ylabel('F1 Score')
     plt.xlabel("Retention Fraction")
+    plt.xlim([-0.01,1.01])
+    plt.ylim([-0.01,1.01])
     plt.legend()
     plt.savefig(filename, bbox_inches='tight')
     plt.clf()
