@@ -29,10 +29,11 @@ python3.7 or above
 
 ### LightGBM
 
-`pip install lightgbm'
+`pip install lightgbm`
 
 ### NGBoost
 
 `pip install ngboost`
+
 `pip install importlib-metadata`
 
