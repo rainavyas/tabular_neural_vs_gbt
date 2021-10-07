@@ -24,8 +24,6 @@ class Config():
         self.seed = seed
         self.eval_dev_overlap = eval_dev_overlap
 
-        self.run_checks()
-
 class XPartitioner():
     '''
     Requires a block of data and partitions it into
