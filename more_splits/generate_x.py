@@ -19,6 +19,7 @@ if __name__ == '__main__':
     commandLineParser = argparse.ArgumentParser(description='Partition data.')
     commandLineParser.add_argument('data_path', type=str, help='Path to data')
     commandLineParser.add_argument('climate_info_path', type=str, help='Path to climate information')
+    commandLineParser.add_argument('save_path', type=str, help='Path to save data')
     commandLineParser.add_argument('--time_splits', nargs=4, type=float, default=[0.6, 0.1, 0.15, 0.15], help='Time splits')
     commandLineParser.add_argument('--climate_splits', nargs=3, type=int, default=[3, 1, 1], help='Climate splits')
 
