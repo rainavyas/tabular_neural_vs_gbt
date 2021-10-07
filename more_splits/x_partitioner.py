@@ -142,7 +142,7 @@ class XPartitioner():
         # Shuffle the second time segment data and split into train and dev
         df_second_kept_climates = shuffle(df_second_kept_climates, random_state=self.config.seed)
         df_train_xtime = df_second_kept_climates[:int(TRAIN_FRAC*len(df_second_kept_climates))]
-        df_dev_xtime = df_first_kept_climates[int(TRAIN_FRAC*len(df_second_kept_climates)):]
+        df_dev_xtime = df_second_kept_climates[int(TRAIN_FRAC*len(df_second_kept_climates)):]
         
 
         self.dfs_to_save = {}
