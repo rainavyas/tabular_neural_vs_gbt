@@ -1,4 +1,4 @@
-![alt text](https://github.com/yandex-research/uncertainty-challenge/blob/0ee9faa49d25a484c15adc893e174f90c4728d38/tabular_weather_prediction/data_partitioning/splits.PNG)
+![alt text](https://github.com/rainavyas/tabular_neural_vs_gbt/blob/main/more_splits/splits_aug.png)
 
 The aim is to fold in more data into the canonical train data split to assess the following
 
