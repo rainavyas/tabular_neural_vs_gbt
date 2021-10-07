@@ -1,3 +1,5 @@
+![alt text](https://github.com/rainavyas/tabular_neural_vs_gbt/blob/main/more_splits/splits_aug.png)
+
 The aim is to fold in more data into the canonical train data split to assess the following
 
 1. Add all climates into train, so there is only a time shift to eval_out data
