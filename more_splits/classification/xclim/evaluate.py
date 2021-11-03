@@ -22,7 +22,7 @@ from sklearn.metrics import precision_recall_curve
 import argparse
 import os
 import sys
-from calibrate import eval_calibration
+
 
 def metric_accuracy(preds, targets):
     pred_inds = np.argmax(np.asarray(preds), axis=1)
